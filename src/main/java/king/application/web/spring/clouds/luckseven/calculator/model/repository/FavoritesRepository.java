@@ -1,0 +1,22 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package king.application.web.spring.clouds.luckseven.calculator.model.repository;
+
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.annotation.Model;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+/**
+ *
+ * @author king
+ */
+@Model(bean = Favorites.class)
+public interface FavoritesRepository extends JpaRepository<Favorites,String> ,JpaSpecificationExecutor<Favorites> {
+    
+    // 根据 目标的 id 来获取 获取 相对应的 favorites 的 信息
+    
+}
