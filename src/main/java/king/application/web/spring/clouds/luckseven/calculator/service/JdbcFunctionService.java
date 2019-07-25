@@ -7,6 +7,9 @@ package king.application.web.spring.clouds.luckseven.calculator.service;
 
 import com.king.wind.spring.boot.jdbc.function.JdbcFunction;
 import java.util.List;
+import java.util.Optional;
+import king.application.web.spring.clouds.luckseven.calculator.service.jpa.JpaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,17 +25,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class JdbcFunctionService {
 
+    @Autowired
+    private JpaService jpa;
+
+    //输出 相对应的 值
+    public <T, R> JdbcFunction<T, R> function(JdbcFunction<T, R> function) {
+        return function;
+    }
+
     //查找全部
-    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, List<T>> findAll(T target, Pageable pageable) {
-        return new JdbcFunction<C, List<T>>() {
+    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, Page<T>> findAll(T target, Pageable pageable) {
+        return new JdbcFunction<C, Page<T>>() {
             @Override
-            public List<T> doFunction(C repository) {
-                return repository.findAll(Example.of(target), pageable).getContent();
+            public Page<T> doFunction(C repository) {
+                return jpa.findAll(repository, target, pageable);
             }
         };
     }
 
-    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, List<T>> findAll(T target) {
+    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, Page<T>> findAll(T target) {
         return this.findAll(target, Pageable.unpaged());
     }
 
@@ -53,7 +64,7 @@ public class JdbcFunctionService {
         return new JdbcFunction<C, Page<T>>() {
             @Override
             public Page<T> doFunction(C executor) {
-                Page<T> page = executor.findAll(specification, pageable);
+                Page<T> page = jpa.findAll(executor, specification, pageable);
                 return page;
             }
 
@@ -66,13 +77,12 @@ public class JdbcFunctionService {
     }
 
     //我们 开始 另一个 方法 的 策略
-    
     // 查找一次
-    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, T> findOne(T target) {
-        return new JdbcFunction<C, T>() {
+    public <T, C extends JpaRepository<T, ?>> JdbcFunction<C, Optional<T>> findOne(T target) {
+        return new JdbcFunction<C, Optional<T>>() {
             @Override
-            public T doFunction(C repository) {
-                return repository.findOne(Example.of(target)).orElse(null);
+            public Optional<T> doFunction(C repository) {
+                return jpa.findOne(repository, target);
             }
         };
     }
@@ -112,4 +122,5 @@ public class JdbcFunctionService {
             }
         };
     }
+
 }

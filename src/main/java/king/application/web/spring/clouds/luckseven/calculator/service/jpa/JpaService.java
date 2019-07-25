@@ -5,9 +5,11 @@
  */
 package king.application.web.spring.clouds.luckseven.calculator.service.jpa;
 
+import com.king.wind.spring.boot.jdbc.function.JdbcFunction;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,9 +21,11 @@ import king.application.web.spring.clouds.luckseven.calculator.service.ModelServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -38,7 +42,39 @@ public class JpaService {
     private JdbcFunctionService function;
     
     @Autowired
-    private ApplicationContext applicationContext;
+    private RepositoryService repository;
+    
+     //下面 ， 我们 开始 设计 范围缩减 
+    
+    public <T> Optional<T> findOne(JpaRepository<T,?> repository , T target ){
+        return repository.findOne(Example.of(target));
+    }
+    
+    public <T> Page<T> findAll(JpaRepository<T, ?> repository, T target, Pageable pageable) {
+
+        return repository.findAll(Example.of(target), pageable);
+    }
+
+    public <T> Page<T> findAll(JpaSpecificationExecutor<T> executor, Specification<T> speicification, Pageable pageable) {
+        //输出 相对应的 信息
+        return executor.findAll(speicification, pageable);
+    }
+
+
+    public <T> Boolean save(JpaRepository<T, ?> repository, T target){
+        return repository.save(target) != null ? Boolean.TRUE : Boolean.FALSE;
+    }
+    
+    public <T> Boolean update(JpaRepository<T,?> repository , T target){
+        // 相对应的 更新 相对应的 值
+        return repository.exists(Example.of(target)) ? this.save(repository, target) : Boolean.FALSE;
+    }
+    
+    public <T> Boolean insert(JpaRepository<T,?> repository , T target){
+        //输出 相对应的值
+        return repository.exists(Example.of(target)) ? Boolean.FALSE : this.save(repository, target);
+    }
+    
     
     public <T> Specification<T> specification(T target){
         return new Specification<T>() {
@@ -75,7 +111,7 @@ public class JpaService {
     
     public <T,M> List<T> oneToMany(M one,BeanFunction<M,T> function,Pageable pageable) throws Exception{
         //得到 相对应的 模板
-        JpaRepository<T,?> repository = applicationContext.getBean(JpaRepository.class);
+        JpaRepository<T,?> repository = null;
         
         // 最大的 问题 ， 便是 如何 one ， 装饰相对应的 template
         
@@ -88,7 +124,7 @@ public class JpaService {
         
         //最终我们是使用 相对应的 repository , 进行 findAll 的 查询
         
-        return this.model.doJdbcFunction(repository,this.function.findAll(template, pageable));
+        return null;
     }
     
     public <T,M> T manyToOne(M target ,BeanFunction<M,T> function){
@@ -97,7 +133,7 @@ public class JpaService {
         
         T template = function.doFunction(target);
         
-        return this.model.doJdbcFunction(repository, this.function.findOne(template));
+        return this.model.doJdbcFunction(repository, this.function.findOne(template)).orElse(null);
     }
     
     public interface BeanFunction<T,M> extends Function<T,M>{} 
