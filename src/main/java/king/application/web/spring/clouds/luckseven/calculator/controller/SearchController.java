@@ -7,6 +7,7 @@ package king.application.web.spring.clouds.luckseven.calculator.controller;
 
 import com.king.wind.spring.boot.jdbc.function.JdbcFunction;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -21,6 +22,7 @@ import king.application.web.spring.clouds.luckseven.calculator.model.repository.
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.UserRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
+import king.application.web.spring.clouds.luckseven.calculator.service.jpa.JdbcService;
 import king.application.web.spring.clouds.luckseven.calculator.service.jpa.PageableService;
 import king.application.web.spring.clouds.luckseven.calculator.service.jpa.SpecificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,7 +71,7 @@ public class SearchController {
     private PageableService pageable;
 
     @Autowired
-    private JdbcTemplate template;
+    private JdbcService jdbc;
 
     /**
      *
@@ -99,7 +102,7 @@ public class SearchController {
                                     @Override
                                     public Predicate toPredicate(Root<PeridocialBrief> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                                         //暂时 ， 设定为这样  ， 实际情况 ， 应该可以 让客户端自己设定 ， 减轻 相对应的 工作
-                                        
+
                                         //目前 只是 进行 相对应的 id 进行 搜索
                                         String id = new StringBuilder().append("%").append(string).append("%").toString();
                                         Predicate predicate = cb.like(root.get("id"), id);
@@ -110,6 +113,23 @@ public class SearchController {
         return page.getContent();
     }
 
+    // 输出 相对应的 Favorites 的 数量 
+    /**
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("peridocial/favorites")
+    public List<Map<String, Object>> searchFavoritesCount(@RequestBody List<String> id) {
+        return this.model.doJdbcFunction(this.favorites, new JdbcFunction<FavoritesRepository, List<Map<String, Object>>>() {
+            @Override
+            public List<Map<String, Object>> doFunction(FavoritesRepository favorites) {
+                return favorites.searchFavoritesCount(id);
+            }
+        });
+    }
+
+    
     //对于 favorites  并没有 许多的 操作 ， 因此 ， 我们 就可以直接 使用 findAll ,target 方法 来完成 ， 我们想要的效果
     @RequestMapping("favorites")
     public Object find_all_favorites(Favorites favorites, Integer page_index, Integer page_size) {
@@ -136,7 +156,7 @@ public class SearchController {
                 int end = start + page_size;
 
                 //进行 输入 相对应的 信息
-                return repository.favorites(user_id,start,end);
+                return repository.favorites(user_id, start, end);
             }
             //相对应 进行 修饰 其他的 东西
         };
@@ -144,17 +164,23 @@ public class SearchController {
         System.out.println("hello");
         return this.model.doJdbcFunction(this.peridocial_brief, _function);
     }
-    
+
     @RequestMapping("subscribe/peridocial/brief")
-    public Object find_all_subscribe_peridocial(Subscribe subscribe, Integer page_index, Integer page_size){
-        return this.model.doJdbcFunction(this.peridocial_brief,new JdbcFunction<PeridocialBriefRepository ,List<PeridocialBrief>>(){
+    public Object find_all_subscribe_peridocial(Subscribe subscribe, Integer page_index, Integer page_size) {
+        return this.model.doJdbcFunction(this.peridocial_brief, new JdbcFunction<PeridocialBriefRepository, List<PeridocialBrief>>() {
             @Override
             public List<PeridocialBrief> doFunction(PeridocialBriefRepository repository) {
                 int start = page_index * page_size;
                 int end = start + page_size;
-                return repository.subscribe(subscribe.getUserId(), start , end );
+                return repository.subscribe(subscribe.getUserId(), start, end);
             }
-            
+
         });
     }
+
+    @RequestMapping("list")
+    public Object show() {
+        return "dqwd";
+    }
+
 }

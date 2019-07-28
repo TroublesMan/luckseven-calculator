@@ -16,6 +16,7 @@ import king.application.web.spring.clouds.luckseven.calculator.model.repository.
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
+import king.application.web.spring.clouds.luckseven.calculator.service.jpa.JdbcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

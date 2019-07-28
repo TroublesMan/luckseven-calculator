@@ -5,12 +5,16 @@
  */
 package king.application.web.spring.clouds.luckseven.calculator.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.Login;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
@@ -49,6 +53,9 @@ public class TestController {
     
     @Autowired
     private ApplicationService application;
+    
+    @Autowired
+    private FavoritesRepository favorites;
     
     @RequestMapping("hello")
     public Object hello(){
@@ -99,5 +106,20 @@ public class TestController {
         },Pageable.unpaged()));
     }
     
+    
+    //相对应的 输出 信息 
+    
+    //为相对应的 方式 测试 一下 输出的 方式
+    
+    @RequestMapping("peridocial/favorites")
+    public List<Map<String, Object>> searchFavoritesCountTest() {
+        List<String> list_id = new ArrayList<>();
+
+        list_id.add("a123");
+        list_id.add("a124");
+        return this.favorites.searchFavoritesCount(list_id);
+        
+    }
+
 
 }
