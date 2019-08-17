@@ -18,109 +18,75 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "peridocial")
 public class PeridocialBrief {
-    
-     //这本期刊的书 id
+
+    //这本期刊的书 id
     @Id
     private String id = null;
-    
-    //相对应的封面
-    @Column(name="magazine_id")
-    private String magazineId = null;
-    
-    @Column(name="_describe")
+
+    @Column(name = "_describe")
     private String describe = null;
-    
+
     //这本杂志的封面主题
     private String name = null;
-    
+
     //这本杂志的更新日期
-    @Column(name="_date")
+    @Column(name = "_date")
     private Date date = null;
     //页数
-    //private int count;
-    @Column(name = "_count")
-    private Integer count = null;
-    //第几期
-    
-    private Integer number = null;
-    //private int number ;
-    
+
     //本期的杂志封面
-    @Column(name="_image")
+    @Column(name = "_image")
     private String image = null;
-    @Column(name="_href")
-    private String href = null;
-    
-    public void setId( String id ){
+
+    @Column(name = "belongto")
+    private String belongto = null;
+
+    public void setId(String id) {
         this.id = id;
     }
-    
-    public String getId(){
+
+    public String getId() {
         return this.id;
     }
-    
-    public void setMagazineId(String peridocialId){
-        this.magazineId = peridocialId;
-    }
-    
-    public String getMagazineId(){
-        return this.magazineId;
-    }
-    
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    
-    public void setDate(Date date){
+
+    public void setDate(Date date) {
         this.date = date;
     }
-    
-    public Date getDate(){
+
+    public Date getDate() {
         return this.date;
     }
-    
-    public void setCount(Integer count){
-        this.count = count;
+
+    public void setImage(String href) {
+        this.image = href;
     }
-    
-    public Integer getCount(){
-        return this.count;
-    }
-    
-    public void setNumber(Integer number){
-        this.number = number;
-    }
-    
-    public Integer getNumber(){
-        return this.number;
-    }
-    
-    public void setImage(String href){
-        this.image= href;
-    }
-    
-    public String getImage(){
+
+    public String getImage() {
         return this.image;
     }
-    
-    public void setHref(String href){
-        this.href = href;
-    }
-    
-    public String getHref(){
-        return this.href;
-    }
-    
-    public void setDescribe(String describe){
+
+    public void setDescribe(String describe) {
         this.describe = describe;
     }
-    
-    public String getDescribe(){
+
+    public String getDescribe() {
         return this.describe;
     }
-    
+
+    public void setBelongto(String belongto) {
+        this.belongto = belongto;
+    }
+
+    public String getBelongto() {
+        return this.belongto;
+    }
+
 }

@@ -14,7 +14,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.PeridocialBrief;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Subscribe;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialBriefRepository;
@@ -129,7 +128,6 @@ public class SearchController {
         });
     }
 
-    
     //对于 favorites  并没有 许多的 操作 ， 因此 ， 我们 就可以直接 使用 findAll ,target 方法 来完成 ， 我们想要的效果
     @RequestMapping("favorites")
     public Object find_all_favorites(Favorites favorites, Integer page_index, Integer page_size) {
@@ -165,6 +163,7 @@ public class SearchController {
         return this.model.doJdbcFunction(this.peridocial_brief, _function);
     }
 
+    /*
     @RequestMapping("subscribe/peridocial/brief")
     public Object find_all_subscribe_peridocial(Subscribe subscribe, Integer page_index, Integer page_size) {
         return this.model.doJdbcFunction(this.peridocial_brief, new JdbcFunction<PeridocialBriefRepository, List<PeridocialBrief>>() {
@@ -176,11 +175,7 @@ public class SearchController {
             }
 
         });
-    }
 
-    @RequestMapping("list")
-    public Object show() {
-        return "dqwd";
     }
-
+     */
 }

@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class User {
+    
+    
     @Id
     private String id = null;
     
