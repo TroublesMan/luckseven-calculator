@@ -6,7 +6,7 @@
 package king.application.web.spring.clouds.luckseven.calculator.model.repository;
 
 import java.util.List;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.PeridocialBrief;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.annotation.Model;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -17,11 +17,11 @@ import org.springframework.data.repository.query.Param;
  *
  * @author king
  */
-@Model(bean = PeridocialBrief.class)
-public interface PeridocialBriefRepository extends JpaRepository<PeridocialBrief, String>, JpaSpecificationExecutor<PeridocialBrief> {
+@Model(bean = Article.class)
+public interface ArticleRepository extends JpaRepository<Article, String>, JpaSpecificationExecutor<Article> {
 
-    @Query(value = "select p.* from peridocial p where p.id in ( select f.peridocial_id from favorites f where f.user_id = :userId  order by f._time desc) limit :start , :end ", nativeQuery = true)
-    public List<PeridocialBrief> favorites(@Param("userId") String user_id, @Param("start") int start, @Param("end") int end);
+    @Query(value = "select p.* from article p where p.id in ( select f.article_id from favorites f where f.user_id = :userId  order by f._time desc) limit :start , :end ", nativeQuery = true)
+    public List<Article> favorites(@Param("userId") String user_id, @Param("start") int start, @Param("end") int end);
 
     /**
      * 可以 根据 目标用户的 某一个 时间 ， 来返回 相对应的 目标 订阅的 图书 更新的 了 基本 图书
@@ -35,7 +35,5 @@ public interface PeridocialBriefRepository extends JpaRepository<PeridocialBrief
      * @param end
      * @return 
      */
-    @Query(value = "select p.* from peridocial p WHERE p.magazine_id in ( select s.magazine_id  from subscribe s where s.user_id = :userId ) order by p._date limit :start , :end ", nativeQuery = true)
-    public List<PeridocialBrief> subscribe(@Param("userId") String user_id, @Param("start") int start, @Param("end") int end);
 
 }

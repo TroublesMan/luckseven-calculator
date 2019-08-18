@@ -10,10 +10,9 @@ import java.util.Date;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.Login;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.User;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.UserRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.IdService;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
@@ -22,6 +21,7 @@ import king.application.web.spring.clouds.luckseven.calculator.service.jpa.Repos
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
 
 /**
  *
@@ -44,7 +44,7 @@ public class InsertController {
     private UserRepository user;
 
     @Autowired
-    private PeridocialRepository peridocial;
+    private ArticleRepository article;
 
     @Autowired
     private FavoritesRepository favorites;
@@ -55,12 +55,12 @@ public class InsertController {
     @Autowired
     private RepositoryService repository;
 
-    @RequestMapping("peridocial")
-    public Object insert_peridocial(Peridocial peridocial) {
-        String id = this.id.create(peridocial);
-        peridocial.setId(id);
+    @RequestMapping("article")
+    public Object insert_article(Article article) {
+        String id = this.id.create(article);
+        article.setId(id);
 
-        this.model.doJdbcFunction(this.peridocial, this.jdbcfunction.insert(peridocial));
+        this.model.doJdbcFunction(this.article, this.jdbcfunction.insert(article));
         return this.model.toString();
 
     }

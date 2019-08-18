@@ -7,8 +7,8 @@ package king.application.web.spring.clouds.luckseven.calculator.service;
 
 import com.alibaba.fastjson.JSON;
 import java.util.List;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.PeridocialBrief;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApplicationService {
     
-    private List<PeridocialBrief> peridocials = null;
+    private List<Article> peridocials = null;
     
     //获取 相对应 系统内的数据 的 固定数据
     
@@ -38,12 +38,12 @@ public class ApplicationService {
      *
      * @return  */
     
-    public List<PeridocialBrief> most(){
+    public List<Article> most(){
         //目前 ， 我们 就暂时 最后 一次 传输的 那些 数据 
         return this.peridocials;
     }
     
-    public void setMost(List<PeridocialBrief> peridocials){
+    public void setMost(List<Article> peridocials){
         this.peridocials = peridocials;
     }
 }

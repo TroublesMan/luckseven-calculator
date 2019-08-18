@@ -13,10 +13,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.Login;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
@@ -27,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
 
 /**
  *
@@ -46,7 +46,7 @@ public class TestController {
     private ThreadJdbcFunctionService thread_function;
     
     @Autowired
-    private PeridocialRepository peridocial;
+    private ArticleRepository article;
     
     @Autowired
     private ApplicationContext applicationContext;
@@ -89,16 +89,16 @@ public class TestController {
     
     
     @RequestMapping("thread/function")
-    public Object thread_function_test(Peridocial peridocial){
-        return this.model.doJdbcFunction(this.peridocial,this.thread_function.findAll(peridocial));
+    public Object thread_function_test(Article article){
+        return this.model.doJdbcFunction(this.article,this.thread_function.findAll(article));
     }
     
     
     @RequestMapping("thread/specification")
     public Object thread_specification(){
-        return this.model.doJdbcFunction(this.peridocial, this.thread_function.findAll(new Specification<Peridocial>() {
+        return this.model.doJdbcFunction(this.article, this.thread_function.findAll(new Specification<Article>() {
             @Override
-            public Predicate toPredicate(Root<Peridocial> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                 
                 return cb.equal(root.get("id"),"a124");
                 
@@ -111,7 +111,7 @@ public class TestController {
     
     //为相对应的 方式 测试 一下 输出的 方式
     
-    @RequestMapping("peridocial/favorites")
+    @RequestMapping("article/favorites")
     public List<Map<String, Object>> searchFavoritesCountTest() {
         List<String> list_id = new ArrayList<>();
 

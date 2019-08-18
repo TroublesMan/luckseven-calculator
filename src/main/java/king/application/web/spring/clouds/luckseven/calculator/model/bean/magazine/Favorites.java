@@ -25,8 +25,8 @@ public class Favorites {
     @Column(name = "user_id")
     private String userId = null;
     
-    @Column(name = "peridocial_id")
-    private String peridocialId = null;
+    @Column(name = "article_id")
+    private String articleId = null;
     
     @Column(name = "_time")
     private Date time = null;
@@ -47,12 +47,12 @@ public class Favorites {
         return this.userId;
     }
     
-    public void setPeridocialId(String peridocialId){
-        this.peridocialId = peridocialId;
+    public void setArticleId(String articleId){
+        this.articleId = articleId;
     }
     
-    public String getPeridocialId(){
-        return this.peridocialId;
+    public String getArticle(){
+        return this.articleId;
     }
     
     public void setTime(Date time){

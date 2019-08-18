@@ -6,8 +6,7 @@
 package king.application.web.spring.clouds.luckseven.calculator.aop;
 
 import java.util.List;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.PeridocialBrief;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialBriefRepository;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -16,6 +15,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
 
 /**
  *
@@ -48,8 +48,8 @@ public class MostFavoritesAspectComponent {
         Object repository = joinPoint.getArgs()[0];
         
         //相对应的 设置 相对应的 
-        if( repository instanceof PeridocialBriefRepository && ( result instanceof Page || result instanceof List ) ){
-            List<PeridocialBrief> list = result instanceof Page ? ((Page)result).getContent() : (List) result;
+        if( repository instanceof ArticleRepository && ( result instanceof Page || result instanceof List ) ){
+            List<Article> list = result instanceof Page ? ((Page)result).getContent() : (List) result;
             this.application.setMost(list);
         }
         

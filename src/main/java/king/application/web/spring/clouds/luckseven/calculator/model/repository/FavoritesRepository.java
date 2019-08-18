@@ -23,7 +23,7 @@ public interface FavoritesRepository extends JpaRepository<Favorites,String> ,Jp
     
     // 根据 目标的 id 来获取 获取 相对应的 favorites 的 信息
     
-    @Query(value = "SELECT f.peridocial_id as id , count(f.id) as favorites_count FROM favorites f WHERE f.peridocial_id in ( :id  )  GROUP BY f.peridocial_id" , nativeQuery = true)
+    @Query(value = "SELECT f.article_id as id , count(f.id) as favorites_count FROM favorites f WHERE f.article_id in ( :id  )  GROUP BY f.article_id" , nativeQuery = true)
     public  List<Map<String,Object>> searchFavoritesCount(@Param("id") List<String> id );
     
 }

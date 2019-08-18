@@ -6,14 +6,14 @@
 package king.application.web.spring.clouds.luckseven.calculator.controller;
 
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
 
 /**
  *
@@ -33,12 +33,12 @@ public class DeleteController {
     private FavoritesRepository favorites;
     
     @Autowired
-    private PeridocialRepository peridocial;
+    private ArticleRepository article;
     
-    @RequestMapping("peridocial")
-    public Object delete_peridocial(Peridocial peridocial){
+    @RequestMapping("article")
+    public Object delete_article(Article article){
         
-        return this.model.doJdbcFunction(this.peridocial, this.jdbcfunction.delete(peridocial));
+        return this.model.doJdbcFunction(this.article, this.jdbcfunction.delete(article));
     }
     
     @RequestMapping("favorites")

@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Resource;
 import king.application.web.spring.clouds.luckseven.calculator.function.id.IdFunction;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -32,7 +32,7 @@ public class ApplicationConfiguration {
     public Map<Class,IdFunction> id_function_map(){
         Map<Class,IdFunction> map = new ConcurrentHashMap<>();
         
-        map.put(Peridocial.class,this.id_function_peridocial);
+        map.put(Article.class,this.id_function_peridocial);
         map.put(Favorites.class, this.id_function_favorites);
         
         return map;

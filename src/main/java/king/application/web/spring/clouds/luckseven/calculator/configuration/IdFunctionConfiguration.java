@@ -7,7 +7,7 @@ package king.application.web.spring.clouds.luckseven.calculator.configuration;
 
 import king.application.web.spring.clouds.luckseven.calculator.function.id.IdFunction;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +24,10 @@ public class IdFunctionConfiguration {
     private ApplicationService application;
     
     @Bean("id_function_peridocial")
-    public IdFunction<Peridocial> id_function_peridocial(){
-        return new IdFunction<Peridocial>(){
+    public IdFunction<Article> id_function_peridocial(){
+        return new IdFunction<Article>(){
             @Override
-            public String doFunction(Peridocial target) {
+            public String doFunction(Article target) {
                 
                 StringBuilder builder = new StringBuilder();
                 

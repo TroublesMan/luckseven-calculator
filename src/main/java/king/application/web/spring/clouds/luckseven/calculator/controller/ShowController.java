@@ -5,21 +5,22 @@
  */
 package king.application.web.spring.clouds.luckseven.calculator.controller;
 
-import com.king.wind.spring.boot.jdbc.function.JdbcFunction;
 import javax.servlet.http.HttpServletRequest;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.Login;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.common.User;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Peridocial;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.ArticleContent;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleContentRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.UserRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.ApplicationService;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
-import king.application.web.spring.clouds.luckseven.calculator.service.jpa.JdbcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
+import org.springframework.data.domain.Example;
 
 /**
  *
@@ -30,7 +31,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ShowController {
 
     @Autowired
-    private PeridocialRepository peridocial;
+    private ArticleRepository article;
+    
+    @Autowired
+    private ArticleContentRepository article_content;
 
     @Autowired
     private LoginRepository login;
@@ -48,12 +52,17 @@ public class ShowController {
     private ApplicationService application;
 
     //获取 目前的相对应信息
-    @RequestMapping("peridocial")
-    public Object show_peridocial(HttpServletRequest request, Peridocial peridocial) {
+    @RequestMapping("article")
+    public Object show_article(HttpServletRequest request, Article article) {
         System.out.println(request.getParameterMap());
 
-        System.out.println(peridocial.getId());
-        return this.model.doJdbcFunction(this.peridocial, this.function.findOne(peridocial));
+        System.out.println(article.getId());
+        return this.model.doJdbcFunction(this.article, this.function.findOne(article));
+    }
+    
+    @RequestMapping("article/content")
+    public Object show_article_content(ArticleContent article_content){
+        return this.article_content.findOne(Example.of(article_content));
     }
 
     @RequestMapping("user")

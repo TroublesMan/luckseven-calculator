@@ -13,11 +13,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Favorites;
-import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.PeridocialBrief;
+import king.application.web.spring.clouds.luckseven.calculator.model.bean.magazine.Article;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.FavoritesRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.LoginRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialBriefRepository;
-import king.application.web.spring.clouds.luckseven.calculator.model.repository.PeridocialRepository;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.UserRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.JdbcFunctionService;
 import king.application.web.spring.clouds.luckseven.calculator.service.ModelService;
@@ -33,6 +31,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
+import king.application.web.spring.clouds.luckseven.calculator.service.bean.ArticleContentService;
 
 /**
  *
@@ -49,10 +49,13 @@ public class SearchController {
     private LoginRepository login;
 
     @Autowired
-    private PeridocialRepository peridocial;
+    private ArticleRepository article;
 
     @Autowired
-    private PeridocialBriefRepository peridocial_brief;
+    private ArticleRepository article_brief;
+
+    @Autowired
+    private ArticleContentService article_content_service;
 
     @Autowired
     private FavoritesRepository favorites;
@@ -84,30 +87,28 @@ public class SearchController {
      * @param page_size
      * @return
      */
-    @RequestMapping("peridocial/brief")
-    public Object find_all_peridocial(String string, Integer page_index, Integer page_size) {
+    @RequestMapping("article/brief")
+    public Object find_all_article(String string, Integer page_index, Integer page_size) {
 
-        //切记 ， 这个 peridocial 也可以当做 相对应的 string
+        //切记 ， 这个 article 也可以当做 相对应的 string
         // 需要 相对应的 默认 配置
         Pageable pageable = new PageRequest(page_index != null ? page_index : 0, page_size != null ? page_size : 10);
 
-        //return this.model.doJdbcFunction(this.peridocial,this.function.findAll(peridocial));
-        Page<PeridocialBrief> page = this.model
-                .doJdbcFunction(this.peridocial_brief,
-                        this.function.findAll(
-                                this.specification.specification(
-                                        new Specification<PeridocialBrief>() {
-                                    // 进行 相对应的 判定
-                                    @Override
-                                    public Predicate toPredicate(Root<PeridocialBrief> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
-                                        //暂时 ， 设定为这样  ， 实际情况 ， 应该可以 让客户端自己设定 ， 减轻 相对应的 工作
+        //return this.model.doJdbcFunction(this.article,this.function.findAll(article));
+        Page<Article> page = this.model
+                .doJdbcFunction(this.article_brief,
+                        this.function.findAll(this.specification.specification(new Specification<Article>() {
+                            // 进行 相对应的 判定
+                            @Override
+                            public Predicate toPredicate(Root<Article> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+                                //暂时 ， 设定为这样  ， 实际情况 ， 应该可以 让客户端自己设定 ， 减轻 相对应的 工作
 
-                                        //目前 只是 进行 相对应的 id 进行 搜索
-                                        String id = new StringBuilder().append("%").append(string).append("%").toString();
-                                        Predicate predicate = cb.like(root.get("id"), id);
-                                        return predicate;
-                                    }
-                                }), pageable));
+                                //目前 只是 进行 相对应的 id 进行 搜索
+                                String id = new StringBuilder().append("%").append(string).append("%").toString();
+                                Predicate predicate = cb.like(root.get("id"), id);
+                                return predicate;
+                            }
+                        }), pageable));
 
         return page.getContent();
     }
@@ -118,7 +119,7 @@ public class SearchController {
      * @param id
      * @return
      */
-    @RequestMapping("peridocial/favorites")
+    @RequestMapping("article/favorites")
     public List<Map<String, Object>> searchFavoritesCount(@RequestBody List<String> id) {
         return this.model.doJdbcFunction(this.favorites, new JdbcFunction<FavoritesRepository, List<Map<String, Object>>>() {
             @Override
@@ -133,17 +134,17 @@ public class SearchController {
     public Object find_all_favorites(Favorites favorites, Integer page_index, Integer page_size) {
         Pageable pageable = new PageRequest(page_index != null ? page_index : 0, page_size != null ? page_size : 10);
 
-        //return this.model.doJdbcFunction(this.peridocial,this.function.findAll(peridocial));
+        //return this.model.doJdbcFunction(this.article,this.function.findAll(article));
         return this.model.doJdbcFunction(this.favorites, this.function.findAll(favorites, pageable));
     }
 
-    @RequestMapping("favorites/peridocial/brief")
-    public Object find_all_favorites_peridocial(Favorites favorites, Integer page_index, Integer page_size) {
+    @RequestMapping("favorites/article/brief")
+    public Object find_all_favorites_article(Favorites favorites, Integer page_index, Integer page_size) {
         //由于 逻辑 比较 复杂 ， 因此  ，我们 需要 将 结构 进一步的 细分
         //我们 生成 相对应的 function
-        JdbcFunction<PeridocialBriefRepository, List<PeridocialBrief>> _function = new JdbcFunction<PeridocialBriefRepository, List<PeridocialBrief>>() {
+        JdbcFunction<ArticleRepository, List<Article>> _function = new JdbcFunction<ArticleRepository, List<Article>>() {
             @Override
-            public List<PeridocialBrief> doFunction(PeridocialBriefRepository repository) {
+            public List<Article> doFunction(ArticleRepository repository) {
 
                 //我们 得到 目标 信息 id;
                 String user_id = favorites.getUserId();
@@ -160,15 +161,15 @@ public class SearchController {
         };
         //相对应的 进行  输入 方法 
         System.out.println("hello");
-        return this.model.doJdbcFunction(this.peridocial_brief, _function);
+        return this.model.doJdbcFunction(this.article_brief, _function);
     }
 
     /*
-    @RequestMapping("subscribe/peridocial/brief")
-    public Object find_all_subscribe_peridocial(Subscribe subscribe, Integer page_index, Integer page_size) {
-        return this.model.doJdbcFunction(this.peridocial_brief, new JdbcFunction<PeridocialBriefRepository, List<PeridocialBrief>>() {
+    @RequestMapping("subscribe/article/brief")
+    public Object find_all_subscribe_article(Subscribe subscribe, Integer page_index, Integer page_size) {
+        return this.model.doJdbcFunction(this.article_brief, new JdbcFunction<articleBriefRepository, List<articleBrief>>() {
             @Override
-            public List<PeridocialBrief> doFunction(PeridocialBriefRepository repository) {
+            public List<articleBrief> doFunction(articleBriefRepository repository) {
                 int start = page_index * page_size;
                 int end = start + page_size;
                 return repository.subscribe(subscribe.getUserId(), start, end);
@@ -178,4 +179,25 @@ public class SearchController {
 
     }
      */
+    
+    
+    @RequestMapping("article/content")
+    public Object like_article_content( String text){
+        
+        StringBuilder builder = new StringBuilder();
+        
+        for(int index = 0 ; index < text.length(); index++ ){
+            
+            char word = text.charAt(index);
+            
+            builder.append("%")
+                    .append(word);
+        }
+        
+        builder.append("%");
+        
+        return this.article_content_service.findByLike(builder.toString());
+        
+    }
+    
 }

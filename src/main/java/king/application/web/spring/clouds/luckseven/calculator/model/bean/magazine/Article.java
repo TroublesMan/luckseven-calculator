@@ -16,8 +16,8 @@ import javax.persistence.Table;
  * @author king
  */
 @Entity
-@Table(name = "peridocial")
-public class PeridocialBrief {
+@Table(name = "article")
+public class Article {
 
     //这本期刊的书 id
     @Id
