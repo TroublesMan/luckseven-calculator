@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import king.application.web.spring.clouds.luckseven.calculator.model.repository.ArticleRepository;
 import king.application.web.spring.clouds.luckseven.calculator.service.bean.ArticleContentService;
+import king.application.web.spring.clouds.luckseven.calculator.service.jpa.JpaService;
 
 /**
  *
@@ -74,6 +75,9 @@ public class SearchController {
 
     @Autowired
     private JdbcService jdbc;
+    
+    @Autowired
+    private JpaService jpa;
 
     /**
      *

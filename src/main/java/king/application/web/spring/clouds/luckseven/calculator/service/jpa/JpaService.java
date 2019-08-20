@@ -46,6 +46,13 @@ public class JpaService {
     
      //下面 ， 我们 开始 设计 范围缩减 
     
+    public <T> Long count(JpaRepository<T,?> repository , T target ){
+        
+        return repository.count(Example.of(target));
+        
+    }
+    
+    
     public <T> Optional<T> findOne(JpaRepository<T,?> repository , T target ){
         return repository.findOne(Example.of(target));
     }
